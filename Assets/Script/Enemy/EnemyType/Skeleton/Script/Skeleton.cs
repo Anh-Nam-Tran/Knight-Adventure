@@ -40,7 +40,6 @@ public class Skeleton : Entity
     public override void Update()
     {
         base.Update();
-        Debug.Log(stateMachine.currentState);
     }
 
     private void AttackHitboxEnable() => EntityCore.EntityCombat.attack.enabled = true;

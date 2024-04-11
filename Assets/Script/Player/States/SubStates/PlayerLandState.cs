@@ -8,6 +8,12 @@ public class PlayerLandState : PlayerGroundedState
     {
     }
 
+    public override void Enter()
+    {
+        base.Enter();
+        player.JumpState.ResetAmountOfJumpsLeft();
+    }
+
     public override void LogicUpdate()
     {
         base.LogicUpdate();

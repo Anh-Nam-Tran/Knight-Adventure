@@ -7,9 +7,9 @@ public class EnemyResourceBar : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public Transform cam;
 
-    public void LateUpdate()
+    public void Update()
     {
-        transform.LookAt(transform.position + cam.forward);
+        transform.rotation = Quaternion.Euler(0f, 0f, 0f);;
     }
 
     public void ChangeXScale(float value, float maxValue)

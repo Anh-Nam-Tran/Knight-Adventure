@@ -6,6 +6,7 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable, IDealDamage
 {
     private bool isKnockbackActive;
     private float knockbackStartTime;
+    public bool isDodging;
 
     public PlayerStat playerStat;
     public Resource resource;
@@ -18,11 +19,15 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable, IDealDamage
     public void LogicUpdate()
     {
         CheckKnockback();
+        Debug.Log(isDodging);
     }
 
     public void Damage(float amount)
     {
-        resource.currentHealth -= DamageCalculation(playerStat.currentDefense, amount);
+        if (!isDodging)
+        {
+            resource.currentHealth -= DamageCalculation(playerStat.currentDefense, amount);
+        }
     }
 
     public float DealDamage()

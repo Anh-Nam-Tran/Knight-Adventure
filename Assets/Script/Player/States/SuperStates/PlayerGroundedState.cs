@@ -70,9 +70,9 @@ public class PlayerGroundedState : PlayerState
             player.InAirState.StartCoyoteTime();
             stateMachine.ChangeState(player.InAirState);
         }
-        else if (dashInput && player.DashState.CheckIfCanDash() && !isTouchingCeiling)
+        else if (dashInput && !isTouchingCeiling)
         {
-            if (player.Core.Resource.CheckCurrentStamina(player.Core.Resource.playerStat.currentStaminaConsumption))
+            if (player.Core.Resource.CheckCurrentStamina(player.Core.Resource.playerStat.currentStaminaConsumption) && player.DashState.CheckIfCanDash())
             {
                 stateMachine.ChangeState(player.DashState);
             }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerDashState : PlayerAbilityState
 {
-    public bool CanDash { get; private set; }
+    public bool CanDash { get; private set; } = true;
     private bool isHolding;
     private bool dashInputStop;
 
@@ -23,6 +23,7 @@ public class PlayerDashState : PlayerAbilityState
         base.Enter();
 
         CanDash = false;
+        player.Core.Combat.isDodging = true;
         player.InputHandler.UseDashInput();
         dashDirection = Vector2.right * core.Movement.FacingDirection;
         core.Movement.SetVelocity(playerData.dashVelocity, dashDirection);
@@ -37,6 +38,8 @@ public class PlayerDashState : PlayerAbilityState
         {
             core.Movement.SetVelocityY(core.Movement.CurrentVelocity.y * playerData.dashEndYMultiplier);
         }
+        ResetCanDash();
+        player.Core.Combat.isDodging = false;
     }
 
     public override void LogicUpdate()
