@@ -6,7 +6,7 @@ public class SkeletonMeleeAttackState : MeleeAttackState
 {
     private Skeleton skeleton;
 
-    public SkeletonMeleeAttackState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_MeleeAttack stateData, Skeleton skeleton) : base(entity, stateMachine, animBoolName, stateData)
+    public SkeletonMeleeAttackState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, Transform attackPosition, D_MeleeAttack stateData, Skeleton skeleton) : base(entity, stateMachine, animBoolName, attackPosition, stateData)
     {
         this.skeleton = skeleton;
     }
@@ -28,6 +28,10 @@ public class SkeletonMeleeAttackState : MeleeAttackState
         if (skeleton.isStaggered)
         {
             stateMachine.ChangeState(skeleton.damagedState);
+        }
+        else if (skeleton.isDead)
+        {
+            stateMachine.ChangeState(skeleton.deadState);
         }
         else if (isAnimationFinished)
         {

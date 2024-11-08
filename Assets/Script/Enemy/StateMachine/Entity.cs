@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    private Movement Movement { get => movement ?? Core.GetCoreComponent(ref movement); }
+
+	private Movement movement;
     #region Components
     public FiniteStateMachine stateMachine;
     public D_Entity entityData;
     public Animator anim { get; private set; }
-    public EntityCore EntityCore { get; private set; }
+    public AnimationToStatemachine atsm;
+    public Core Core { get; private set; }
     public int lastDamageDirection { get; private set; }
     #endregion
 
@@ -26,31 +30,34 @@ public class Entity : MonoBehaviour
     #endregion
 
     #region Resource
-    private float currentHealth;
-    private float currentStance;
+    public Resource resource;
     #endregion
 
     private Vector2 velocityWorkspace;
 
     public virtual void Awake()
     {
-        EntityCore = GetComponentInChildren<EntityCore>();
+        Core = GetComponentInChildren<Core>();
+
+        resource = Core.GetCoreComponent<Resource>();
         anim = GetComponent<Animator>();
         stateMachine = new FiniteStateMachine();
+        atsm = GetComponent<AnimationToStatemachine>();
     } 
 
     public virtual void Start()
     {
-
+        Debug.Log(Movement);
     }
 
     public virtual void Update()
     {
-        EntityCore.LogicUpdate();
+        Core.LogicUpdate();
         stateMachine.currentState.LogicUpdate();
-        isStaggered = EntityCore.EntityResource.CheckStanceOutage();
+        isStaggered = resource.CheckStaminaOutage();
+        isDead = resource.CheckHealthOutage();
 
-        anim.SetFloat("yVelocity", EntityCore.EntityMovement.RB.velocity.y);
+        anim.SetFloat("yVelocity", Movement.RB.velocity.y);
     }
 
     public virtual void FixedUpdate()
@@ -72,6 +79,11 @@ public class Entity : MonoBehaviour
     {
         return Physics2D.Raycast(playerCheck.position, transform.right, entityData.closeRangeActionDistance, entityData.whatIsPlayer);
     }
+
+    public virtual void DamageHop(float velocity) {
+		velocityWorkspace.Set(Movement.RB.velocity.x, velocity);
+		Movement.RB.velocity = velocityWorkspace;
+	}
 
     private void AnimationTrigger() => stateMachine.currentState.AnimationTrigger();
 

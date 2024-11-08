@@ -23,28 +23,36 @@ public class PlayerDashState : PlayerAbilityState
         base.Enter();
 
         CanDash = false;
-        player.Core.Combat.isDodging = true;
+        //Combat.isDodging = true;
         player.InputHandler.UseDashInput();
-        dashDirection = Vector2.right * core.Movement.FacingDirection;
-        core.Movement.SetVelocity(playerData.dashVelocity, dashDirection);
-        core.Resource.ConsumeStamina(core.Resource.playerStat.currentStaminaConsumption);
+        dashDirection = Vector2.right * Movement.FacingDirection;
+        Movement?.SetVelocity(playerData.dashVelocity, dashDirection);
+        Resource?.ConsumeStamina(Resource.stat.currentStaminaConsumption);
     }
 
     public override void Exit()
     {
         base.Exit();
 
-        if(core.Movement.CurrentVelocity.y > 0)
+        if(Movement.CurrentVelocity.y > 0)
         {
-            core.Movement.SetVelocityY(core.Movement.CurrentVelocity.y * playerData.dashEndYMultiplier);
+            Movement?.SetVelocityY(Movement.CurrentVelocity.y * playerData.dashEndYMultiplier);
         }
         ResetCanDash();
-        player.Core.Combat.isDodging = false;
+        //Combat.isDodging = false;
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        if (!isExitingState)
+        {
+            if (!isAnimationFinished)
+            {
+                player.InputHandler.UseDashInput();
+            }
+        }
 
         if (!isExitingState)
         {

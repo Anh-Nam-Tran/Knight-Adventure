@@ -29,6 +29,10 @@ public class SkeletonPlayerDetectedState : PlayerDetectedState
         {
             stateMachine.ChangeState(skeleton.damagedState);
         }
+        else if (skeleton.isDead)
+        {
+            stateMachine.ChangeState(skeleton.deadState);
+        }
         else if (performCloseRangeAction)
         {
             stateMachine.ChangeState(skeleton.meleeAttackState);
@@ -43,7 +47,7 @@ public class SkeletonPlayerDetectedState : PlayerDetectedState
         }
         else if (!isDetectingLedge)
         {
-            entityCore.EntityMovement.Flip();
+            Movement?.Flip();
             stateMachine.ChangeState(skeleton.moveState);
         }
     }

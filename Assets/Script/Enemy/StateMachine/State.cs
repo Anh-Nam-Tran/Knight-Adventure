@@ -6,7 +6,7 @@ public class State
 {
     protected FiniteStateMachine stateMachine;
     protected Entity entity;
-    protected EntityCore entityCore;    
+    protected Core core;    
     public bool isAnimationFinished;
     protected bool isExitingState;
 
@@ -19,7 +19,7 @@ public class State
         this.entity = entity;
         this.stateMachine = stateMachine;
         this.animBoolName = animBoolName;
-        entityCore = entity.EntityCore;
+        core = entity.Core;
     }
 
     public virtual void Enter()

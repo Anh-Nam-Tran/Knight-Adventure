@@ -11,6 +11,7 @@ public class Skeleton : Entity
     public SkeletonPlayerDetectedState playerDetectedState { get; private set; }
     public SkeletonChargeState chargeState { get; private set; }
     public SkeletonMeleeAttackState meleeAttackState { get; private set; }
+    public SkeletonDeadState deadState { get; private set; }
     [SerializeField] private D_IdleState idleStateData;
     [SerializeField] private D_DamagedState damagedStateData;
     [SerializeField] private D_MoveState moveStateData;
@@ -18,6 +19,10 @@ public class Skeleton : Entity
     [SerializeField] private D_PlayerDetected playerDetectedData;
     [SerializeField] private D_ChargeState chargeStateData;
     [SerializeField] private D_MeleeAttack meleeAttackData;
+    [SerializeField] private D_DeadState deadStateData;
+
+    [SerializeField]
+    private Transform meleeAttackPosition;
 
     public override void Awake()
     {
@@ -29,12 +34,13 @@ public class Skeleton : Entity
         lookForPlayerState = new SkeletonLookForPlayerState(this, stateMachine, "lookForPlayer", lookForPlayerData, this);
         playerDetectedState = new SkeletonPlayerDetectedState(this, stateMachine, "playerDetected", playerDetectedData, this);
         chargeState = new SkeletonChargeState(this, stateMachine, "charge", chargeStateData, this);
-        meleeAttackState = new SkeletonMeleeAttackState(this, stateMachine, "attack", meleeAttackData, this);
+        meleeAttackState = new SkeletonMeleeAttackState(this, stateMachine, "attack", meleeAttackPosition, meleeAttackData, this);
+        deadState = new SkeletonDeadState(this, stateMachine, "dead", deadStateData, this);
     }
 
     public override void Start()
     {
-        stateMachine.Initialize(idleState);        
+        stateMachine.Initialize(idleState);      
     }
 
     public override void Update()
@@ -42,6 +48,5 @@ public class Skeleton : Entity
         base.Update();
     }
 
-    private void AttackHitboxEnable() => EntityCore.EntityCombat.attack.enabled = true;
-    private void AttackHitboxDisable() => EntityCore.EntityCombat.attack.enabled = false;
+    private void DestroyOnDeath() => gameObject.SetActive(false);
 }

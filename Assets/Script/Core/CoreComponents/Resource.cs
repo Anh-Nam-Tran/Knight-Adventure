@@ -2,82 +2,88 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource : CoreComponent, IHealth, IStamina
+public class Resource : CoreComponent
 {
     public ResourceBar healthBar;
     public ResourceBar staminaBar;
-    public PlayerStat playerStat;
-    public float currentHealth;
-    public float currentStamina;
+    public EntityStat stat;
+    [field: SerializeField] public Stat Health { get; private set; }
+    [field: SerializeField] public Stat Stamina { get; private set; }
 
-    public void LogicUpdate()
+    protected override void Awake()
     {
-        RegenStamina(playerStat.currentStaminaRegen);
-        CheckStaminaCap();
-        CheckHealthCap();
-        healthBar.SetValue(currentHealth);
-        staminaBar.SetValue(currentStamina);
+        base.Awake();
+
+        Health.MaxValue = stat.maxHealth;
+        Stamina.MaxValue = stat.maxStamina;
+
+        healthBar.SetMaxValue(Health.MaxValue);
+        staminaBar.SetMaxValue(Stamina.MaxValue);
+            
+        Health.Init();
+        Stamina.Init();
+    }
+
+    public override void LogicUpdate()
+    {
+        base.LogicUpdate();
+        RegenStamina(stat.currentStaminaRegen);
+        healthBar.SetValue(Health.CurrentValue);
+        staminaBar.SetValue(Stamina.CurrentValue);
     }
     #region Stamina
     public void ConsumeStamina(float amount)
     {
-        currentStamina -= amount;
+        Stamina.Decrease(amount);
     }
 
     public void RegenStamina(float amount)
     {
-        currentStamina += amount;
-    }
-
-    public void CheckStaminaCap()
-    {
-        if (currentStamina >= playerStat.maxStamina)
-        {
-            currentStamina = playerStat.maxStamina;
-        }
-
-        else if (currentStamina <= 0)
-        {
-            currentStamina = 0;
-        }
+        Stamina.Increase(amount);
     }
 
     public bool CheckCurrentStamina(float amount)
     {
-        return currentStamina >= amount;
+        return Stamina.CurrentValue >= amount;
+    }
+
+    public bool CheckStaminaOutage()
+    {
+        return Stamina.CurrentValue <= 0;
+    }
+    public void FullyRestoreStamina()
+    {
+        Stamina.Init();
     }
     #endregion
 
     #region Health
     public void ConsumeHealth(float amount)
     {
-        if (currentHealth > amount)
+        if (Health.CurrentValue > amount)
         {
-            currentHealth -= amount;
+            Health.Decrease(amount);
         }
     }
 
     public void RegenHealth(float amount)
     {
-        currentHealth += amount;
+        Health.Increase(amount);
     }
 
     public void RestoreHealth(float amount)
     {
-        currentHealth += amount;
+        Health.Increase(amount);
     }
 
-    public void CheckHealthCap()
+    public bool CheckHealthOutage()
     {
-        if (currentHealth >= playerStat.maxHealth)
-        {
-            currentHealth = playerStat.maxHealth;
-        }
+        return Health.CurrentValue <= 0;
+    }
 
-        else if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-        }
+    public void FullyRestoreHealth()
+    {
+        Health.Init();
     }
     #endregion
 }

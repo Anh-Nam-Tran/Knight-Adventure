@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class DamagedState : State
 {
+    private Movement Movement { get => movement ?? core.GetCoreComponent(ref movement); }
+	private CollisionSenses CollisionSenses { get => collisionSenses ?? core.GetCoreComponent(ref collisionSenses); }
+
+	private Movement movement;
+	private CollisionSenses collisionSenses;
     protected D_DamagedState stateData;
 
     protected bool isPlayerInMinAgroRange;
     protected bool isPlayerInMaxAgroRange;
     protected bool performCloseRangeAction;
 
-    public DamagedState(Entity etity, FiniteStateMachine stateMachine, string animBoolName, D_DamagedState stateData) : base(etity, stateMachine, animBoolName)
+    public DamagedState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, D_DamagedState stateData) : base(entity, stateMachine, animBoolName)
     {
         this.stateData = stateData;
     }
@@ -28,7 +33,7 @@ public class DamagedState : State
     {
         base.Enter();
 
-        entityCore.EntityMovement.SetVelocityX(0f);
+        Movement?.SetVelocityX(0f);
     }
 
     public override void Exit()

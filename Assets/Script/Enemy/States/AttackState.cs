@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class AttackState : State
 {
-    protected Transform attackPosition;
-    protected bool isPlayerInMinAgroRange;
+    private Movement movement;
+	protected Transform attackPosition;
 
-    public AttackState(Entity etity, FiniteStateMachine stateMachine, string animBoolName) : base(etity, stateMachine, animBoolName)
+	protected bool isAnimationFinished;
+	protected bool isPlayerInMinAgroRange;
+
+    public AttackState(Entity entity, FiniteStateMachine stateMachine, string animBoolName, Transform attackPosition) : base(entity, stateMachine, animBoolName)
     {
+        this.attackPosition = attackPosition;
 
+        movement = core.GetCoreComponent<Movement>();
     }
 
     public override void DoChecks()
@@ -23,8 +28,9 @@ public class AttackState : State
     {
         base.Enter();
 
-        //entity.atsm.attackState = this;
-        entityCore.EntityMovement.SetVelocityX(0f);
+        entity.atsm.attackState = this;
+        isAnimationFinished = false;
+        movement?.SetVelocityX(0f);
     }
 
     public override void Exit()
@@ -35,7 +41,7 @@ public class AttackState : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        entityCore.EntityMovement.SetVelocityX(0f);
+        movement?.SetVelocityX(0f);
     }
 
     public override void PhysicsUpdate()

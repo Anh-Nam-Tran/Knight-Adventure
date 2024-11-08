@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EntityHitbox : MonoBehaviour
 {
-    public EntityCombat entityCombat;
+    /*public EntityCombat entityCombat;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -27,5 +27,5 @@ public class EntityHitbox : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 }

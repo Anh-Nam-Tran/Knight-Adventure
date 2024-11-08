@@ -7,28 +7,19 @@ public class PlayerAttackState : PlayerAbilityState
     private int xInput;
     private float velocityToSet;
     private bool setVelocity;
-    public PlayerAttackState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
+    private Weapon weapon;
+    public PlayerAttackState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName, Weapon weapon) : base(player, stateMachine, playerData, animBoolName)
     {
+        this.weapon = weapon;
 
+        weapon.OnExit += ExitHandler;
     }
 
     public override void Enter()
     {
         base.Enter();
-        setVelocity = false;
-        player.InputHandler.UseAttackInput();
-        if (player.attackCounter >= 2)
-        {
-            player.AttackCounterReset();
-        }
-        else
-        {
-            player.AttackCounterIncrease();
-        }
-        player.Anim.SetInteger("attack", player.attackCounter);
-        player.attackStartTime = Time.time;
-        core.Movement.SetVelocityX(playerData.attackVelocity * core.Movement.FacingDirection);
-        core.Resource.ConsumeStamina(core.Resource.playerStat.currentAttackStamina);
+        
+        weapon.Enter();
     }
 
     public override void Exit()
@@ -36,16 +27,9 @@ public class PlayerAttackState : PlayerAbilityState
         base.Exit();
     }
 
-    public override void LogicUpdate()
+    private void ExitHandler()
     {
-        base.LogicUpdate();
-
-        if (!isExitingState)
-        {
-            if (isAnimationFinished)
-            {
-                isAbilityDone = true;
-            }
-        }
+        AnimationFinishTrigger();
+        isAbilityDone = true;
     }
 }

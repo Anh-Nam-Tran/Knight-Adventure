@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class PlayerAbilityState : PlayerState
 {
+    protected Movement Movement { get => movement ?? core.GetCoreComponent(ref movement); }
+	protected CollisionSenses CollisionSenses { get => collisionSenses ?? core.GetCoreComponent(ref collisionSenses); }
+    protected Resource Resource { get => resource ?? core.GetCoreComponent(ref resource); }
+
+	protected Movement movement;
+	protected CollisionSenses collisionSenses;
+    protected Resource resource;
     protected bool isAbilityDone;
     protected bool isGrounded;
     
@@ -16,7 +23,7 @@ public class PlayerAbilityState : PlayerState
     {
         base.DoChecks();
 
-        isGrounded = core.CollisionSenses.Ground;
+        isGrounded = CollisionSenses.Ground;
     }
 
     public override void Enter()
@@ -38,7 +45,7 @@ public class PlayerAbilityState : PlayerState
         //Change state to ground idle or in air state depends on object y velocity after finishing ability
         if (isAbilityDone)
         {
-            if (isGrounded && core.Movement.CurrentVelocity.y < 0.01f)
+            if (isGrounded && Movement.CurrentVelocity.y < 0.01f)
             {
                 stateMachine.ChangeState(player.IdleState);
             }

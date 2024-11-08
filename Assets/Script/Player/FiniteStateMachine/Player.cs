@@ -23,15 +23,16 @@ public class Player : MonoBehaviour
     public PlayerCrouchMoveState CrouchMoveState { get; private set; }
     public PlayerAttackState AttackState { get; private set; }
 
-    [SerializeField]
-    private PlayerData playerData;
-    private PlayerStat playerStat;
+    public PlayerData playerData;
+    public PlayerStat playerStat;
+    public PlayerStatistic playerStatistic;
     #endregion
 
     #region Components
     public Core Core { get; private set; }
     public Animator Anim { get; private set; }
     public PlayerInputHandler InputHandler { get; private set; }
+    public AnimationToStatemachine atsm;
     public Rigidbody2D RB { get; private set; }
     public Transform DashDirectionIndicator { get; private set; }
     public CapsuleCollider2D MovementCollider { get; private set; }
@@ -40,16 +41,22 @@ public class Player : MonoBehaviour
     #region Other Variables         
 
     private Vector2 workspace;
-    public int attackCounter { get; private set; }
-    public float attackStartTime;
     #endregion
+
+    public Weapon weapon;
 
     #region Unity Callback Functions
     private void Awake()
     {
         Core = GetComponentInChildren<Core>();
 
+        weapon = transform.Find("Weapon").GetComponent<Weapon>();
+
+        weapon.SetCore(Core);
+
         StateMachine = new PlayerStateMachine();
+
+        atsm = GetComponent<AnimationToStatemachine>();
 
         IdleState = new PlayerIdleState(this, StateMachine, playerData, "idle");
         MoveState = new PlayerMoveState(this, StateMachine, playerData, "move");
@@ -63,23 +70,26 @@ public class Player : MonoBehaviour
         DashState = new PlayerDashState(this, StateMachine, playerData, "dash");
         CrouchIdleState = new PlayerCrouchIdleState(this, StateMachine, playerData, "crouchIdle");
         CrouchMoveState = new PlayerCrouchMoveState(this, StateMachine, playerData, "crouchMove");
-        AttackState = new PlayerAttackState(this, StateMachine, playerData, "attacking");
+        AttackState = new PlayerAttackState(this, StateMachine, playerData, "attacking", weapon);
     }
 
     private void Start()
     {
         Application.targetFrameRate = 60;
         Anim = GetComponent<Animator>();
+        playerStatistic = GetComponent<PlayerStatistic>();
         InputHandler = GetComponent<PlayerInputHandler>();
         RB = GetComponent<Rigidbody2D>();
         MovementCollider = GetComponent<CapsuleCollider2D>();
         StateMachine.Initialize(IdleState);
+
+        playerStatistic.AttackPlusUpdate(weapon.Data.BonusAttack);
     }
 
     private void Update()
     {
         Core.LogicUpdate();
-        AttackTimer();
+
         StateMachine.CurrentState.LogicUpdate();
     }
 
@@ -102,36 +112,8 @@ public class Player : MonoBehaviour
         MovementCollider.offset = center;
     }   
 
-    public void AttackCounterReset()
-    {
-        attackCounter = 1;
-    }
-
-    public void AttackCounterIncrease()
-    {
-        attackCounter++;
-    }
-
-    public void AttackTimer()
-    {
-        if (Time.time - attackStartTime >= 0.66f)
-        {
-            attackCounter = 0;
-        }
-    }
-
-    public void StopVelocity()
-    {
-        Core.Movement.SetVelocityZero();
-    }
-
     private void AnimationTrigger() => StateMachine.CurrentState.AnimationTrigger();
 
     private void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
-
-    private void Attack1HitboxEnable() => Core.Combat.attack1.enabled = true;
-    private void Attack1HitboxDisable() => Core.Combat.attack1.enabled = false;
-    private void Attack2HitboxEnable() => Core.Combat.attack2.enabled = true;
-    private void Attack2HitboxDisable() => Core.Combat.attack2.enabled = false;
     #endregion
 }

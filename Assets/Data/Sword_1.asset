@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c33dd433a7871ea4dbaf1fd0fd223aaa, type: 3}
+  m_Name: Sword_1
+  m_EditorClassIdentifier: 
+  <AnimatorController>k__BackingField: {fileID: 9100000, guid: c8b36fe0013703a49b31df822dab7a59, type: 2}
+  <NumberOfAttacks>k__BackingField: 2
+  <BonusAttack>k__BackingField: 120
+  <ComponentData>k__BackingField:
+  - rid: 8571679432638464005
+  - rid: 8571679432638464006
+  - rid: 8571679450002620416
+  - rid: 8571679504626089984
+  references:
+    version: 2
+    RefIds:
+    - rid: 8571679432638464005
+      type: {class: WeaponSpriteData, ns: , asm: Assembly-CSharp}
+      data:
+        name: WeaponSpriteData
+        attackData:
+        - name: Attack 1
+          <Sprites>k__BackingField:
+          - {fileID: 1823976622, guid: 48f5a49747f0f43499b888063569bbd6, type: 3}
+          - {fileID: 961007870, guid: 48f5a49747f0f43499b888063569bbd6, type: 3}
+          - {fileID: -811089491, guid: 48f5a49747f0f43499b888063569bbd6, type: 3}
+          - {fileID: 1226941422, guid: 48f5a49747f0f43499b888063569bbd6, type: 3}
+        - name: Attack 2
+          <Sprites>k__BackingField:
+          - {fileID: 1397535784, guid: c16d6a8cbeab097409d09e54a3510ff5, type: 3}
+          - {fileID: -320684949, guid: c16d6a8cbeab097409d09e54a3510ff5, type: 3}
+          - {fileID: -1518045298, guid: c16d6a8cbeab097409d09e54a3510ff5, type: 3}
+          - {fileID: 1780436689, guid: c16d6a8cbeab097409d09e54a3510ff5, type: 3}
+          - {fileID: 231106263, guid: c16d6a8cbeab097409d09e54a3510ff5, type: 3}
+          - {fileID: -135768432, guid: c16d6a8cbeab097409d09e54a3510ff5, type: 3}
+    - rid: 8571679432638464006
+      type: {class: WeaponMovementData, ns: , asm: Assembly-CSharp}
+      data:
+        name: WeaponMovementData
+        attackData:
+        - name: Attack 1
+          <Direction>k__BackingField: {x: 1, y: 0}
+          <Velocity>k__BackingField: 3
+        - name: Attack 2
+          <Direction>k__BackingField: {x: 1, y: 0}
+          <Velocity>k__BackingField: 4
+    - rid: 8571679450002620416
+      type: {class: ActionHitboxData, ns: , asm: Assembly-CSharp}
+      data:
+        name: ActionHitboxData
+        attackData:
+        - name: Attack 1
+          Debug: 0
+          <Hitbox>k__BackingField:
+            serializedVersion: 2
+            x: 0
+            y: -2.48
+            width: 3.35
+            height: 2.06
+        - name: Attack 2
+          Debug: 0
+          <Hitbox>k__BackingField:
+            serializedVersion: 2
+            x: 0
+            y: -2.48
+            width: 3.35
+            height: 2.06
+        <DetectableLayers>k__BackingField:
+          serializedVersion: 2
+          m_Bits: 256
+    - rid: 8571679504626089984
+      type: {class: DamageData, ns: , asm: Assembly-CSharp}
+      data:
+        name: DamageData
+        attackData:
+        - name: Attack 1
+        - name: Attack 2

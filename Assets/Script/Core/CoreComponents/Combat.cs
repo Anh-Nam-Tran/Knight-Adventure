@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Combat : CoreComponent, IDamageable, IKnockbackable, IDealDamage
+public class Combat : CoreComponent, IDamageable, IKnockBackable, IDealDamage
 {
+    private Movement Movement { get => movement ?? core.GetCoreComponent(ref movement); }
+
+	private Movement movement;
+
+    private CollisionSenses CollisionSenses { get => collisionSenses ?? core.GetCoreComponent(ref collisionSenses); }
+
+	private CollisionSenses collisionSenses;
     private bool isKnockbackActive;
     private float knockbackStartTime;
     public bool isDodging;
 
     public PlayerStat playerStat;
     public Resource resource;
-
-    #region Hitbox
-    public BoxCollider2D attack1;
-    public BoxCollider2D attack2;
-    #endregion
 
     public void LogicUpdate()
     {
@@ -26,7 +28,7 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable, IDealDamage
     {
         if (!isDodging)
         {
-            resource.currentHealth -= DamageCalculation(playerStat.currentDefense, amount);
+            resource.Health.Decrease(DamageCalculation(playerStat.currentDefense, amount));
         }
     }
 
@@ -45,20 +47,20 @@ public class Combat : CoreComponent, IDamageable, IKnockbackable, IDealDamage
         return Mathf.Round(atk * (100 / (100 + def)));
     }
 
-    public void Knockback(Vector2 angle, float strength, int direction)
+    public void KnockBack(Vector2 angle, float strength, int direction)
     {
-        core.Movement.SetVelocity(strength, angle, direction);
-        core.Movement.CanSetVelocity = false;
+        Movement?.SetVelocity(strength, angle, direction);
+        Movement.CanSetVelocity = false;
         isKnockbackActive = true;
         knockbackStartTime = Time.time;
     }
 
     private void CheckKnockback()
     {
-        if(isKnockbackActive && core.Movement.CurrentVelocity.y <= 0.01f && core.CollisionSenses.Ground)
+        if(isKnockbackActive && Movement.CurrentVelocity.y <= 0.01f && CollisionSenses.Ground)
         {
             isKnockbackActive = false;
-            core.Movement.CanSetVelocity = true;
+            Movement.CanSetVelocity = true;
         }
     }
 }

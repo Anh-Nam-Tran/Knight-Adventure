@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerTouchingWallState : PlayerState
 {
+    protected Movement Movement { get => movement ?? core.GetCoreComponent(ref movement); }
+	private CollisionSenses CollisionSenses { get => collisionSenses ?? core.GetCoreComponent(ref collisionSenses); }
+
+	private Movement movement;
+	private CollisionSenses collisionSenses;
     protected bool isGrounded;
     protected bool isTouchingWall;
     protected bool grabInput;

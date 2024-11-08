@@ -16,8 +16,8 @@ MonoBehaviour:
   currentHealth: 500
   maxStamina: 100
   currentStamina: 100
-  baseAttack: 320
-  currentAttack: 320
+  baseAttack: 50
+  currentAttack: 250
   baseCritChance: 0.1
   currentCritChance: 0.1
   baseCritDamage: 1.5

@@ -38,6 +38,10 @@ public class SkeletonMoveState : MoveState
         {
             stateMachine.ChangeState(skeleton.damagedState);
         }
+        else if (skeleton.isDead)
+        {
+            stateMachine.ChangeState(skeleton.deadState);
+        }
     }
 
     public override void PhysicsUpdate()

@@ -19,7 +19,7 @@ public class SkeletonDamagedState : DamagedState
     public override void Exit()
     {
         base.Exit();
-        entity.EntityCore.EntityResource.RestoreStance();
+        entity.resource.FullyRestoreStamina();
     }
 
     public override void LogicUpdate()
@@ -40,6 +40,10 @@ public class SkeletonDamagedState : DamagedState
             {
                 stateMachine.ChangeState(skeleton.chargeState);
             }
+        }
+        if (skeleton.isDead)
+        {
+            stateMachine.ChangeState(skeleton.deadState);
         }
     }
 

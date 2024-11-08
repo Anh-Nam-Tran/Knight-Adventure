@@ -1,22 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyResourceBar : MonoBehaviour
 {
-    public SpriteRenderer spriteRenderer;
-    public Transform cam;
+    public Slider slider;
+	public Gradient gradient;
+	public Image fill;
 
-    public void Update()
-    {
-        transform.rotation = Quaternion.Euler(0f, 0f, 0f);;
-    }
+	public void SetMaxValue(float value)
+	{
+		slider.maxValue = value;
+		slider.value = value;
 
-    public void ChangeXScale(float value, float maxValue)
-    {
-        float ratio = value / maxValue;
-        Vector3 currentScale = spriteRenderer.gameObject.transform.localScale;
-        currentScale.x = ratio;
-        spriteRenderer.gameObject.transform.localScale = currentScale;
-    }
+		fill.color = gradient.Evaluate(1f);
+	}
+
+    public void SetValue(float value)
+	{
+		slider.value = value;
+
+		fill.color = gradient.Evaluate(slider.normalizedValue);
+	}
 }

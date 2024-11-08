@@ -29,6 +29,10 @@ public class SkeletonChargeState : ChargeState
         {
             stateMachine.ChangeState(skeleton.damagedState);
         }
+        else if (skeleton.isDead)
+        {
+            stateMachine.ChangeState(skeleton.deadState);
+        }
         else if (performCloseRangeAction)
         {
             stateMachine.ChangeState(skeleton.meleeAttackState);

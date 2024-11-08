@@ -29,6 +29,10 @@ public class SkeletonLookForPlayerState : LookForPlayerState
         {
             stateMachine.ChangeState(skeleton.damagedState);
         }
+        else if (skeleton.isDead)
+        {
+            stateMachine.ChangeState(skeleton.deadState);
+        }
         else if (isPlayerInMinAgroRange)
         {
             stateMachine.ChangeState(skeleton.playerDetectedState);

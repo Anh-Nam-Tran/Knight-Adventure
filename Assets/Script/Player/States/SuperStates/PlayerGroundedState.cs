@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class PlayerGroundedState : PlayerState
 {
+    protected Movement Movement
+    {
+        get => movement ?? core.GetCoreComponent(ref movement);
+    }
+
+    private Movement movement;
+
+    private CollisionSenses CollisionSenses
+    {
+        get => collisionSenses ?? core.GetCoreComponent(ref collisionSenses);
+    }
+
+    private CollisionSenses collisionSenses;
+
+    private Resource Resource
+    {
+        get => resource ?? core.GetCoreComponent(ref resource);
+    }
+
+    private Resource resource;
     protected int xInput;
     protected int yInput;
 
@@ -24,10 +44,10 @@ public class PlayerGroundedState : PlayerState
     {
         base.DoChecks();
 
-        isGrounded = core.CollisionSenses.Ground;
-        isTouchingWall = core.CollisionSenses.WallFront;
-        isTouchingLedge = core.CollisionSenses.LedgeHorizontal;
-        isTouchingCeiling = core.CollisionSenses.Ceiling;
+        isGrounded = CollisionSenses.Ground;
+        isTouchingWall = CollisionSenses.WallFront;
+        isTouchingLedge = CollisionSenses.LedgeHorizontal;
+        isTouchingCeiling = CollisionSenses.Ceiling;
     }
 
     public override void Enter()
@@ -52,7 +72,7 @@ public class PlayerGroundedState : PlayerState
 
         if (player.InputHandler.AttackInput && !isTouchingCeiling)
         {
-            if (player.Core.Resource.CheckCurrentStamina(player.Core.Resource.playerStat.currentAttackStamina))
+            if (Resource.CheckCurrentStamina(Resource.stat.currentAttackStamina))
             {
                 stateMachine.ChangeState(player.AttackState);
             }
@@ -72,7 +92,7 @@ public class PlayerGroundedState : PlayerState
         }
         else if (dashInput && !isTouchingCeiling)
         {
-            if (player.Core.Resource.CheckCurrentStamina(player.Core.Resource.playerStat.currentStaminaConsumption) && player.DashState.CheckIfCanDash())
+            if (Resource.CheckCurrentStamina(Resource.stat.currentStaminaConsumption) && player.DashState.CheckIfCanDash())
             {
                 stateMachine.ChangeState(player.DashState);
             }

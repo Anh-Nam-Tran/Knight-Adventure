@@ -29,6 +29,10 @@ public class SkeletonIdleState : IdleState
         {
             stateMachine.ChangeState(skeleton.damagedState);
         }
+        else if (skeleton.isDead)
+        {
+            stateMachine.ChangeState(skeleton.deadState);
+        }
         else if (isIdleTimeOver)
         {
             stateMachine.ChangeState(skeleton.moveState);
